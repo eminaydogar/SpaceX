@@ -2,11 +2,12 @@
    #include "glut.h"
 
 	float r=1;
+	float rstar=0.3;
 	float sari[]={ 1,1,0.1,1};
     void drawRandomStar()
 {
     	
-    r+=0.3;
+    r+=rstar;
 	if(r>5) r=1;
 	
 glMaterialfv(GL_FRONT,GL_AMBIENT,sari);

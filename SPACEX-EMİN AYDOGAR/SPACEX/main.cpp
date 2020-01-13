@@ -5,15 +5,18 @@
 #pragma comment(lib, "WINMM.lib")
 #include "stars.c"
 #include "planets.c"
+//#include <stdlib.h>
 #include <ctime>
 
 
 
 GLMmodel* pmodel = NULL;
 
+
+int score=0;
 int cammood=2;
 int counter=0;	
-float sinir=0.85;
+float sinir=0.90;
 float x_move;
 float bulletcolor[]={1,0,0};
 int bulletsayac=0;
@@ -23,10 +26,14 @@ float xtarget=-0.1;
 float isik_yer[] = {0, 0, 2};
 float yesil[]={0, 1, 0, 1};
 
-
 float targetxloc[]={-0.3,-0.25,-0.15,-0.1,0.1,0.15,0.25,0.3};
 
  bool globalbool=true;
+
+ 
+ 
+ 
+ 
  
 class bullet {
 public:
@@ -58,8 +65,10 @@ public:
 bullet mybullet[50];
 
 
+
 void init(void)
 {
+	
 	gluLookAt(0, 0.3,3, 0, 0, 0, 0, 2, 0);
    GLfloat light0_position[] = { 0.45, 0.61, 0.66, 0 };
    GLfloat light0_color[] = { 0.65, 0.64, 0.53, 0.15 };
@@ -73,9 +82,21 @@ void init(void)
    glEnable(GL_LIGHTING);
    glEnable(GL_LIGHT0);
    glEnable(GL_DEPTH_TEST);
-   
+     sphere = gluNewQuadric();
+     make_tex();
+     
+ 
 }
 
+void pause()
+{
+	
+}
+
+void restart()
+{
+
+}
 
 
 void displaybullet()
@@ -89,12 +110,16 @@ void drawtarget(bool x=true)
 if(x==true)
 {
 if(ztarget<=1.8){
+	 
 glPushMatrix();
 glMaterialfv(GL_FRONT,GL_AMBIENT,yesil);
 glTranslatef(xtarget,0.2,ztarget+=0.015);
 glutSolidCube(0.1);
 glPopMatrix();  }
-else exit(0);
+else {
+ system("start SPACEX.exe");
+ exit(0);
+}
 }	
 }
 
@@ -103,10 +128,10 @@ void shooting(){
 for(int i=0; i<=50; i++){
 if(-mybullet[i].x_bullet>0){
 if (mybullet[i].visible==true && mybullet[i].bz<=-3 && -mybullet[i].x_bullet>=xtarget+xtarget && -mybullet[i].x_bullet<=xtarget+3*xtarget )
-{ globalbool=false; mybullet[i].visible=false; ztarget=0; counter++; }}
+{ globalbool=false; mybullet[i].visible=false; ztarget=0; counter++; score++; 	PlaySound(TEXT("shoot.wav"),NULL,SND_ASYNC);   }}
 else{
 if (mybullet[i].visible==true && mybullet[i].bz<=-3 && -mybullet[i].x_bullet<=xtarget+xtarget && -mybullet[i].x_bullet>=xtarget+3.8*xtarget ){
-globalbool=false; mybullet[i].visible=false; ztarget=0; counter++; }}}}
+globalbool=false; mybullet[i].visible=false; ztarget=0; counter++; score++; 	PlaySound(TEXT("shoot.wav"),NULL,SND_ASYNC);   }}}}
 
 
 void drawmodel(char* nesne)
@@ -122,8 +147,13 @@ void drawmodel(char* nesne)
 
 void timer(int value)
 {
+	if(score==100){
+		printf("YOU WIN !");
+		system("pause");
+		
+	}
 srand(time(0));
-if(globalbool==false )
+if(globalbool==false  )
  {
  globalbool=true; 
  int yedek = rand()%7;
@@ -136,12 +166,13 @@ if(globalbool==false )
 void mydisplay(){
 glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
+	// Burada deðil de ilk kareden sonra Disable edilirse ikinci kare kaplanmaz
 
-draw4planet();
+
 uydu();
 drawRandomStar();
 displaybullet();
-
+draw4planet();
 shooting();
 drawtarget(globalbool);
 
@@ -158,10 +189,11 @@ glutSwapBuffers();
 
 
 void keyboard (int key, int x, int y){
-switch(key)
+
+		switch(key)
 {
 	case GLUT_KEY_RIGHT:
-	if(x_move>=-sinir){x_move -=0.05;}
+	if(x_move>=-sinir ){x_move -=0.05;}
 	break;
 	
 	case GLUT_KEY_LEFT:
@@ -169,20 +201,29 @@ switch(key)
 	break;
 			
 }
+	
+
 	glutPostRedisplay();
 }
 
-void mouse(int button,int state,int x, int y){
-	if(button==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
+void keyb(unsigned char key, int x, int y)
+{
+	if(key=='x' || key=='X') 
 	{
 	mybullet[bulletsayac].visible=true;
 	bulletsayac++;
+	PlaySound(TEXT("fire.wav"),NULL,SND_ASYNC);  
+	
 	if(counter>=45) {bulletsayac=0; counter=0;}
 	}
 	
+	if(key=='R' || key == 'r')
+	{
+
+	}
 	glutPostRedisplay();
-	
 }
+
 
 
 
@@ -208,12 +249,15 @@ glutCreateWindow("Göktaþý");
 init();
 glutDisplayFunc(mydisplay);
 glutSpecialFunc(keyboard);
+glutKeyboardFunc(keyb);
 glutTimerFunc(1000, timer, 0);
-glutMouseFunc(mouse);
+
 glutIdleFunc(mydisplay);
-PlaySound(TEXT("soundx.wav"),NULL,SND_ASYNC);
+ //PlaySound(TEXT("soundx.wav"),NULL,SND_ASYNC);  
 glutReshapeFunc(reshape);
 glutMainLoop();
+
+
 }
 
 
