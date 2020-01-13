@@ -1,0 +1,36 @@
+
+
+                                                             SPACEX
+--------------------------------------------------------------------------------------------------------------------------------------
+      AD-SOYAD : EMÝN AYDOÐAR
+      NUMARA:1161602023
+--------------------------------------------------------------------------------------------------------------------------------------
+  OYUN HAKKINDA
+ 
+ Amaç       :     Ateþ ederek karþýdan gelen hedefleri vurmak ve yok etmek.
+
+ Kurallar   : Iskalanan hedef belirli bir konumu geçtiði takdirde oyun biter ve kapanýr.
+              50 mermilik hak tanýnmýþtýr. 45 isabetli hedef vuruþu olduðu takdirde mermi sayýsý yenilenir.
+              45 adet hedef vurulmamasý durumunda ise mermi yenilenmez, böylece hedef belirlenen konumu geçer oyun biter.  
+
+ Kontroller :  Sol Ok Tuþu -> sol eksene doðru hareket 
+              Sað Ok Tuþu -> sað eksene doðru hareket
+              Sol Mouse Click -> ateþ etme    
+
+Iþýklandýrma , Kamera ve Ses kullanýlmýþtýr.
+--------------------------------------------------------------------------------------------------------------------------------------   Bazý Algoritmalar Hakkýnda
+
+Ateþ etmek için : 1) Display'in içine oyun baþladýgýnda 50 adet mermi çizilir.
+                  2) Pasif (gözükmeyen) bu mermiler uçaðýn  x konumu ile ayný doðrultuda hareket eder.   
+                  3) Her mouse týklanmasýnda, dizi içinde tutulan 50 mermi sýrasýyla görünürlüðü(visible) aktif(true) olur.
+                  4) Merminin x konumu uçaðýn ateþ edildiði andaki bulunduðu nokta olur.
+                  5) Visible=true olan mermi z ekseninde belirli bir hýzla ilerler.
+                  6) Belirlenen z ekseni dýþýna çýkan mermiler baþa gelir görünürlüðü pasif olur.
+
+Hedef vurmak için : 1) Belirli aralýklarda random çizilen hedefi vurmak için merminin hedef ile olan x,z eksenleri iliþkisine bakýlýr.
+                    2) Merminin z ekseni konumu hedefi geçmekte ve x ekseni, hedefin x uzayýnda kapladýðý aralýkta ise vurma iþlemi                     gerçekleþir.
+                    3) Hedefi vuran mermi pasif hale getirilir.
+                    4)Vurulan hedef yok olur.Daha sonra baþka bir noktadan tekrar var olur.
+-------------------------------------------------------------------------------------------------------------------------------------
+                        
+                   
