@@ -12,7 +12,8 @@
 
 GLMmodel* pmodel = NULL;
 
-
+char s[10];
+bool stop=false;
 int score=0;
 int cammood=2;
 int counter=0;	
@@ -30,7 +31,7 @@ float targetxloc[]={-0.3,-0.25,-0.15,-0.1,0.1,0.15,0.25,0.3};
 
  bool globalbool=true;
 
- 
+
  
  
  
@@ -88,15 +89,18 @@ void init(void)
  
 }
 
-void pause()
-{
-	
+
+void renderBitmapString(float x, float y, void *font,char *string)
+{  
+  char *c;
+  
+  glRasterPos2f(x, y);
+  
+  for (c=string; *c != '\0'; c++) {
+    glutBitmapCharacter(font, *c);
+  }
 }
 
-void restart()
-{
-
-}
 
 
 void displaybullet()
@@ -116,22 +120,20 @@ glMaterialfv(GL_FRONT,GL_AMBIENT,yesil);
 glTranslatef(xtarget,0.2,ztarget+=0.015);
 glutSolidCube(0.1);
 glPopMatrix();  }
-else {
- system("start SPACEX.exe");
- exit(0);
-}
+else {stop=true; rot=0; rstar=0; x_move=999;  renderBitmapString(0,0,GLUT_BITMAP_TIMES_ROMAN_10,"GAME OVER !"); }
 }	
 }
+
 
 
 void shooting(){
 for(int i=0; i<=50; i++){
 if(-mybullet[i].x_bullet>0){
 if (mybullet[i].visible==true && mybullet[i].bz<=-3 && -mybullet[i].x_bullet>=xtarget+xtarget && -mybullet[i].x_bullet<=xtarget+3*xtarget )
-{ globalbool=false; mybullet[i].visible=false; ztarget=0; counter++; score++; 	PlaySound(TEXT("shoot.wav"),NULL,SND_ASYNC);   }}
+{ globalbool=false; mybullet[i].visible=false; ztarget=0; counter++;  	PlaySound(TEXT("shoot.wav"),NULL,SND_ASYNC);    }}
 else{
 if (mybullet[i].visible==true && mybullet[i].bz<=-3 && -mybullet[i].x_bullet<=xtarget+xtarget && -mybullet[i].x_bullet>=xtarget+3.8*xtarget ){
-globalbool=false; mybullet[i].visible=false; ztarget=0; counter++; score++; 	PlaySound(TEXT("shoot.wav"),NULL,SND_ASYNC);   }}}}
+globalbool=false; mybullet[i].visible=false; ztarget=0; counter++; 	PlaySound(TEXT("shoot.wav"),NULL,SND_ASYNC);     }}}}
 
 
 void drawmodel(char* nesne)
@@ -145,19 +147,19 @@ void drawmodel(char* nesne)
 }
 
 
+
+
+
 void timer(int value)
 {
-	if(score==100){
-		printf("YOU WIN !");
-		system("pause");
-		
-	}
+
 srand(time(0));
 if(globalbool==false  )
  {
  globalbool=true; 
  int yedek = rand()%7;
  xtarget=targetxloc[yedek];
+score++;
  }	
   glutTimerFunc(1000, timer, 0);
 }
@@ -166,9 +168,11 @@ if(globalbool==false  )
 void mydisplay(){
 glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-	// Burada deðil de ilk kareden sonra Disable edilirse ikinci kare kaplanmaz
 
-
+	
+   sprintf(s,"SKOR : %d",score);
+   renderBitmapString(0,1,GLUT_BITMAP_TIMES_ROMAN_24,s);
+ 
 uydu();
 drawRandomStar();
 displaybullet();
@@ -199,7 +203,7 @@ void keyboard (int key, int x, int y){
 	case GLUT_KEY_LEFT:
 	if(x_move<=sinir){x_move +=0.05;}
 	break;
-			
+	
 }
 	
 
@@ -208,7 +212,7 @@ void keyboard (int key, int x, int y){
 
 void keyb(unsigned char key, int x, int y)
 {
-	if(key=='x' || key=='X') 
+	if(key==' ') 
 	{
 	mybullet[bulletsayac].visible=true;
 	bulletsayac++;
@@ -217,9 +221,13 @@ void keyb(unsigned char key, int x, int y)
 	if(counter>=45) {bulletsayac=0; counter=0;}
 	}
 	
-	if(key=='R' || key == 'r')
+	if(key=='R' || key == 'r' )
 	{
-
+		if(stop==true){
+			
+			system("start SPACEX.exe");
+			exit(0);
+		}
 	}
 	glutPostRedisplay();
 }

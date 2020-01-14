@@ -14,8 +14,9 @@
               45 adet hedef vurulmamasý durumunda ise mermi yenilenmez, böylece hedef belirlenen konumu geçer oyun biter.  
 
  Kontroller :  Sol Ok Tuþu -> sol eksene doðru hareket 
-              Sað Ok Tuþu -> sað eksene doðru hareket
-              Sol Mouse Click -> ateþ etme    
+               Sað Ok Tuþu -> sað eksene doðru hareket
+               Space ->       ateþ etme   
+               R->            yeniden baþlat 
 
 Iþýklandýrma , Kamera ve Ses kullanýlmýþtýr.
 --------------------------------------------------------------------------------------------------------------------------------------   Bazý Algoritmalar Hakkýnda
